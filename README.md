@@ -26,6 +26,5 @@ Esse projeto consiste em um CRUD simples para controle de clientes e suas contas
 
 
 #### Próximos passos:
-* Adicionar regex pro cnpj
 * Adicionar testes
 * Adicionar autenticação OAuth
