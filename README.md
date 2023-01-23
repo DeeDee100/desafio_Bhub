@@ -23,3 +23,9 @@ Esse projeto consiste em um CRUD simples para controle de clientes e suas contas
 | [http://localhost:8000/bank/cnpj](http://localhost:8000/bank/{cnpj}) | Lista os dados bancários cadastrados a partis do CNPJ informado |
 | [http://localhost:8000/bank/register](http://localhost:8000/bank/register) | Registra um novo dado bacário |
 | [http://localhost:8000/bank/delete/{cnpj}](http://localhost:8000/delete/{cnpj}) | Deleta um dado bancário a prtir do CNPJ informado |
+
+
+#### Próximos passos:
+* Adicionar regex pro cnpj
+* Adicionar testes
+* Adicionar autenticação OAuth
