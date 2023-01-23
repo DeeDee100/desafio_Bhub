@@ -8,9 +8,9 @@ from app import schemas
 router = APIRouter(tags=["Banco"])
 
 
-@router.get("/")
-def home_bank(db: Session = Depends(get_db)):
-    banks = db.query(models.Bank).all()
+@router.get("/{cnpj}")
+def home_bank(cnpj: str, db: Session = Depends(get_db)):
+    banks = db.query(models.Bank).filter(models.Bank.cnpj==cnpj).all()
     return {"message": banks}
 
 
@@ -38,7 +38,7 @@ def delete_bank_account(cnpj: str, bank_info: schemas.BankDelete, db: Session = 
 
     if not request_bank:
         raise HTTPException(
-            status_code=404, detail=f"Conta não encontrada"
+            status_code=404, detail="Conta não encontrada"
         )
 
     db.delete(request_bank)
