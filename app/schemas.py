@@ -21,7 +21,12 @@ class CompanyUpdate(BaseModel):
 
 
 class BankEntry(BaseModel):
-    company: str
+    cnpj: str
     agency: str
     account: str
     bank: str
+
+
+class BankDelete(BaseModel):
+    agency: str
+    account: str

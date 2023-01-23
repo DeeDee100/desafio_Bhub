@@ -1,5 +1,5 @@
 from .database import Base
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, SmallInteger
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -16,7 +16,12 @@ class Company(Base):
     active = Column(Boolean, nullable=False)
     created_on = Column(DateTime(timezone=True), server_default=func.now())
     updated_on = Column(DateTime(timezone=True), server_onupdate=func.now())
-    bank_info = relationship("Bank")
+    bank_info = relationship(
+        "Bank",
+        cascade="all,delete-orphan",
+        back_populates="company_name",
+        uselist=True,
+        )
 
 
 class Bank(Base):
@@ -24,7 +29,11 @@ class Bank(Base):
     __tablename__ = "bank"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    cnpj = Column(String, ForeignKey("company.cnpj"))
+    cnpj = Column(String, ForeignKey("company.cnpj", ))
+    company_name = relationship("Company", back_populates="bank_info")
     agency = Column(String, nullable=False)
     account = Column(String, nullable=False)
     bank = Column(String, nullable=False)
+    bank_code = Column(SmallInteger)
+    created_on = Column(DateTime(timezone=True), server_default=func.now())
+    updated_on = Column(DateTime(timezone=True), server_onupdate=func.now())
