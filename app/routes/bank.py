@@ -10,7 +10,7 @@ router = APIRouter(tags=["Banco"])
 
 @router.get("/{cnpj}")
 def home_bank(cnpj: str, db: Session = Depends(get_db)):
-    banks = db.query(models.Bank).filter(models.Bank.cnpj==cnpj).all()
+    banks = db.query(models.Bank).filter(models.Bank.cnpj == cnpj).all()
     return {"message": banks}
 
 
@@ -27,19 +27,21 @@ def register_bank(bank: schemas.BankEntry, db: Session = Depends(get_db)):
 
 
 @router.delete("/delete/{cnpj}")
-def delete_bank_account(cnpj: str, bank_info: schemas.BankDelete, db: Session = Depends(get_db)):
+def delete_bank_account(
+    cnpj: str, bank_info: schemas.BankDelete, db: Session = Depends(get_db)
+):
     request_bank = (
-        db.query(models.Bank).filter(
+        db.query(models.Bank)
+        .filter(
             models.Bank.cnpj == cnpj,
             models.Bank.account == bank_info.account,
-            models.Bank.agency == bank_info.agency
-        ).first()
+            models.Bank.agency == bank_info.agency,
+        )
+        .first()
     )
 
     if not request_bank:
-        raise HTTPException(
-            status_code=404, detail="Conta não encontrada"
-        )
+        raise HTTPException(status_code=404, detail="Conta não encontrada")
 
     db.delete(request_bank)
     db.commit()

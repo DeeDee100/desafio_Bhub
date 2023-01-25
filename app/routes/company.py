@@ -10,18 +10,19 @@ router = APIRouter(tags=["Clientes"])
 
 @router.get("/")
 def home_company(db: Session = Depends(get_db)):
-    users = db.query(models.Company).all()
-    return {"message": users}
+    companies = db.query(models.Company).all()
+    return {"message": companies}
 
 
 @router.post("/register", status_code=201)
-def register_company(user: schemas.CompanyEntry, db: Session = Depends(get_db)):
-    new = models.Company(**user.dict())
+def register_company(company: schemas.CompanyEntry, db: Session = Depends(get_db)):
+
+    new = models.Company(**company.dict())
     db.add(new)
     try:
         db.commit()
         db.refresh(new)
-        return {"message": user.dict()}
+        return {"message": company.dict()}
     except IntegrityError as err:
         raise HTTPException(status_code=409, detail={"message": err.args})
 

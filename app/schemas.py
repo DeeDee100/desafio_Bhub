@@ -36,7 +36,7 @@ class CompanyEntry(BaseModel):
                 "address": "Rua dos Bobos, 0",
                 "income": 1000,
                 "email": "dee@example.com",
-                "active": True
+                "active": True,
             }
         }
 
@@ -59,3 +59,9 @@ class BankEntry(BaseModel):
 class BankDelete(BaseModel):
     agency: str
     account: str
+
+
+class UserEntry(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
