@@ -22,3 +22,6 @@ uvloop==0.17.0
 watchfiles==0.18.1
 websockets==10.4
 pydantic[email]
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart

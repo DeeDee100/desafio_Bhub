@@ -21,7 +21,7 @@ class Company(Base):
         cascade="all,delete-orphan",
         back_populates="company_name",
         uselist=True,
-        )
+    )
 
 
 class Bank(Base):
@@ -29,7 +29,7 @@ class Bank(Base):
     __tablename__ = "bank"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    cnpj = Column(String, ForeignKey("company.cnpj", ))
+    cnpj = Column(String, ForeignKey("company.cnpj"))
     company_name = relationship("Company", back_populates="bank_info")
     agency = Column(String, nullable=False)
     account = Column(String, nullable=False)
@@ -37,3 +37,14 @@ class Bank(Base):
     bank_code = Column(SmallInteger)
     created_on = Column(DateTime(timezone=True), server_default=func.now())
     updated_on = Column(DateTime(timezone=True), server_onupdate=func.now())
+
+
+class User(Base):
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    email = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=False)
+    name = Column(String, nullable=False)
+    is_admin = Column(Boolean, nullable=False)
+    is_staff = Column(Boolean, nullable=False)

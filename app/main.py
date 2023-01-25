@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from .database.database import engine
 from .database import models
-from .routes import company, bank, users
+from .routes import company, bank, users, login
 
 app = FastAPI(
     title="Bhub Bank",
@@ -25,3 +25,4 @@ def home():
 app.include_router(company.router, prefix="/company")
 app.include_router(bank.router, prefix="/bank")
 app.include_router(users.router, prefix="/user")
+app.include_router(login.router)
