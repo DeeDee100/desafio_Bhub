@@ -66,6 +66,13 @@ class UserEntry(BaseModel):
     email: EmailStr
     password: str
 
+
+class UserUpdate(BaseModel):
+    name: Optional[str]
+    email: Optional[EmailStr]
+    password: Optional[str]
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str

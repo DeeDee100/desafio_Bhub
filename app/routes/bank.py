@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import IntegrityError
+from app.OAuth import OAuth2
 from app.database.database import get_db
 from app.database import models
 from app import schemas
 
-router = APIRouter(tags=["Banco"])
+router = APIRouter(tags=["Banco"], dependencies=[Depends(OAuth2.get_token_header)])
 
 
 @router.get("/{cnpj}")

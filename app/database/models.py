@@ -48,3 +48,5 @@ class User(Base):
     name = Column(String, nullable=False)
     is_admin = Column(Boolean, nullable=False)
     is_staff = Column(Boolean, nullable=False)
+    created_on = Column(DateTime(timezone=True), server_default=func.now())
+    updated_on = Column(DateTime(timezone=True), server_onupdate=func.now())

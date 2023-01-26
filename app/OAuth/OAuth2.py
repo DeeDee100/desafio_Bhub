@@ -1,6 +1,6 @@
 from jose import JWTError, jwt
 from pydantic import BaseModel
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status, Header
 from sqlalchemy.orm.session import Session
 from app.database.database import get_db
 from fastapi.security import OAuth2PasswordBearer
@@ -11,6 +11,11 @@ import datetime as dt
 SECRET_KEY = settings.secret_key
 ALGORITHM = settings.algorithm
 EXPIRE_TIME = settings.access_token_expire_minutes
+CREDENTIAL_EXCEPTION = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Credencial invalida",
+        headers={"WWW-Authenticate": "Bearer"},
+)
 
 
 class TokenData(BaseModel):
@@ -30,25 +35,21 @@ def create_token(data: dict):
     return encoded
 
 
-def verify_token(token: str, credentials_exception):
+def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("user_email")
         if email is None:
-            raise credentials_exception
+            raise CREDENTIAL_EXCEPTION
         token_data = TokenData(email=email)
     except JWTError:
-        raise credentials_exception
+        raise CREDENTIAL_EXCEPTION
     return token_data
 
 
-def current_user(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
-):
-    crentials_exception = HTTPException(
-        status_code=401,
-        detail="Credencial invalida",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+def current_user(token: str = Depends(oauth2_scheme)):
+    return verify_token(token)
 
-    return verify_token(token, crentials_exception)
+
+def get_token_header(x_token: str = Header()):
+    verify_token(x_token)

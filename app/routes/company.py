@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import IntegrityError
+from app.OAuth import OAuth2
 from app.database.database import get_db
 from app.database import models
 from app import schemas
 
-router = APIRouter(tags=["Clientes"])
+router = APIRouter(tags=["Clientes"], dependencies=[Depends(OAuth2.get_token_header)])
 
 
 @router.get("/")
@@ -43,7 +44,7 @@ def delete_company(cnpj: str, db: Session = Depends(get_db)):
     return Response(status_code=204)
 
 
-@router.put("/update/{cnpj}")
+@router.patch("/update/{cnpj}")
 def update_company(
     cnpj: str, company: schemas.CompanyUpdate, db: Session = Depends(get_db)
 ):
